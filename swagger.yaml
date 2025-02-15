@@ -1,0 +1,236 @@
+tags:
+- name: users
+  description: users API
+- name: payments
+  description: payments API
+
+paths:
+  # [GET] users
+  /users:
+    get:
+      tags:
+      - users
+      summary: Find All Users
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+
+    post:
+      tags:
+      - users
+      summary: Add User
+      parameters:
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        schema:
+          $ref: '#/definitions/users'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /users/{id}:
+    get:
+      tags:
+      - users
+      summary: Find User By Id
+      parameters:
+      - name: id
+        in: path
+        description: User Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    put:
+      tags:
+      - users
+      summary: Update User By Id
+      parameters:
+      - name: id
+        in: path
+        description: user Id
+        required: true
+      - name: body
+        in: body
+        description: user Data
+        required: true
+        schema:
+          $ref: '#/definitions/users'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+    delete:
+      tags:
+      - users
+      summary: Delete User By Id
+      parameters:
+      - name: id
+        in: path
+        description: user Id
+        required: true
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  # [POST] payments
+  bills/createpayment:
+    post:
+      tags:
+      - payments
+      summary: Add Payment
+      parameters:
+      - name: body
+        in: body
+        description: payment Data
+        required: true
+        schema:
+          $ref: '#/definitions/payments'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /bills/getpayments:
+    get:
+      tags:
+      - payments
+      summary: Find All Payments
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+  /bill/updatepayment/{id}:
+    put:
+      tags:
+      - payments
+      summary: Update Payment By Id
+      parameters:
+      - name: id
+        in: path
+        description: payment Id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: payment Data
+        required: true
+        schema:
+          $ref: '#/definitions/payments'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /bill/getpayment/{id}:
+    get:
+      tags:
+      - payments
+      summary: Find Payment By Id
+      parameters:
+      - name: id
+        in: path
+        description: payment Id
+        required: true
+        type: string
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /bill/{id}:
+    delete:
+      tags:
+      - payments
+      summary: Delete Payment By Id
+      parameters:
+      - name: id
+        in: path
+        description: payment Id
+        required: true
+        type: string
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+definitions:
+  users:
+    type: object
+    required:
+      - email
+      - password
+    properties:
+      email:
+        type: string
+        description: user Email
+      password:
+        type: string
+        description: user Password
+
+  payments:
+    type: object
+    required:
+      - products
+      - quantity
+      - rate
+      - total
+      - status
+    properties:
+      products:
+        type: string
+        description: Products
+      quantity:
+        type: string
+        description: Quantity
+      rate:
+        type: string
+        description: Rate
+      total:
+        type: string
+        description: Total
+      status:
+        type: string
+        description: Status
+
+schemes:
+- https
+- http
