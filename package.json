@@ -16,6 +16,8 @@
     "deploy:dev": "pm2 start ecosystem.config.js --only dev"
   },
   "dependencies": {
+    "@netlify/functions": "^3.0.0",
+    "@ngrok/ngrok": "^1.4.1",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -31,11 +33,13 @@
     "mongoose": "^6.5.0",
     "morgan": "^1.10.0",
     "reflect-metadata": "^0.1.13",
+    "serverless-http": "^3.2.0",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.5.0",
     "typedi": "^0.10.0",
     "winston": "^3.8.1",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^4.7.1",
+    "yarn": "^1.22.22"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",

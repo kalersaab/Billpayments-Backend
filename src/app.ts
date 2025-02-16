@@ -13,7 +13,8 @@ import { dbConnection } from '@database';
 import { Routes } from '@interfaces/routes.interface';
 import { ErrorMiddleware } from '@middlewares/error.middleware';
 import { logger, stream } from '@utils/logger';
-
+import http from 'http';
+process.env.NGROK_SKIP_BROWSER_WARNING = 'true';
 export class App {
   public app: express.Application;
   public env: string;
@@ -61,7 +62,7 @@ export class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      this.app.use('/', route.router);
+      this.app.use('/api/', route.router);
     });
   }
 
