@@ -41,6 +41,7 @@ export class BillService {
     ]);
     return { data: payment[0]?.data, count: payment[0]?.count[0]?.total };
   }
+
   public async findBillById(id: string) {
     const payment = await this._payments.findById(id);
     return payment;

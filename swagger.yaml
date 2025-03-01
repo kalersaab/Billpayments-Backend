@@ -6,7 +6,7 @@ tags:
 
 paths:
   # [GET] users
-  /users:
+  /api/users:
     get:
       tags:
       - users
@@ -38,7 +38,7 @@ paths:
         500:
           description: 'Server Error'
 
-  /users/{id}:
+  /api/users/{id}:
     get:
       tags:
       - users
@@ -99,7 +99,7 @@ paths:
           description: 'Server Error'
 
   # [POST] payments
-  bills/createpayment:
+  /api/bills/createpayment:
     post:
       tags:
       - payments
@@ -120,7 +120,7 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-  /bills/getpayments:
+  /api/bills/getpayments:
     get:
       tags:
       - payments
@@ -130,7 +130,7 @@ paths:
           description: 'OK'
         500:
           description: 'Server Error'
-  /bill/updatepayment/{id}:
+  /api/bill/updatepayment/{id}:
     put:
       tags:
       - payments
@@ -156,7 +156,7 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-  /bill/getpayment/{id}:
+  /api/bill/getpayment/{id}:
     get:
       tags:
       - payments
@@ -174,7 +174,7 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-  /bill/{id}:
+  /api/bill/{id}:
     delete:
       tags:
       - payments
@@ -183,6 +183,81 @@ paths:
       - name: id
         in: path
         description: payment Id
+        required: true
+        type: string
+      responses:
+        200:
+          description: 'OK'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/cashManagement/createcash:
+    post:
+      tags:
+      - cashManagement
+      summary: Add Cash
+      parameters:
+      - name: body
+        in: body
+        description: cash Data
+        required: true
+        schema:
+          $ref: '#/definitions/cashManagement'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/cashManagement/getcash:
+    get:
+      tags:
+      - cashManagement
+      summary: Find All Cash
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+  /api/cashManagement/updatecash/{id}:
+    put:
+      tags:
+      - cashManagement
+      summary: Update Cash By Id
+      parameters:
+      - name: id
+        in: path
+        description: cash Id
+        required: true
+        type: string
+      - name: body
+        in: body
+        description: cash Data
+        required: true
+        schema:
+          $ref: '#/definitions/cashManagement'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+  /api/cashManagement/{id}:
+    delete:
+      tags:
+      - cashManagement
+      summary: Delete Cash By Id
+      parameters:
+      - name: id
+        in: path
+        description: cash Id
         required: true
         type: string
       responses:
@@ -231,6 +306,21 @@ definitions:
         type: string
         description: Status
 
+  cashManagement:
+    type: object
+    required:
+      - amount
+      - type
+    properties:
+      amount:
+        type: string
+        description: Cash
+      notes:
+        type: string
+        description: Status
+      type:
+        type: string
+        description: Type
 schemes:
 - https
 - http

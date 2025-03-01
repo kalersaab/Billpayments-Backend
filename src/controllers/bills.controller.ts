@@ -1,5 +1,4 @@
 import { createBillDto } from '@/dtos/bills.dto';
-import { payments } from '@/interfaces/users.interface';
 import { BillService } from '@/services/bill.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';

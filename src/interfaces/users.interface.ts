@@ -9,4 +9,11 @@ export interface payments{
   quantity: string;
   rate: string;
   total: string;
-  status?: string;}
+  status?: string;
+}
+export interface Cash{
+  _id?: string;
+  amount: string;
+  notes: string;
+  type: string;
+}
