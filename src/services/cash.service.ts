@@ -32,7 +32,8 @@ export class CashService {
              },
            }
          ])
-         return payment;
+         if(!payment) throw new HttpException(404, 'Cash not found');
+         return payment[0];
        }
      public async deleteCash(id: string) {
        if (!id) throw new HttpException(409, 'Cash Id be empty');

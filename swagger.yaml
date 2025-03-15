@@ -249,7 +249,7 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-  /api/cashManagement/{id}:
+  /api/cashManagement/deletecash/{id}:
     delete:
       tags:
       - cashManagement

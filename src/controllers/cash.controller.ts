@@ -38,7 +38,7 @@ export class CashManagementController {
       const { id } = req.params;
       try {
         const deleteBill = await this.CashService.deleteCash(id);
-        res.status(200).json({ data: deleteBill, message: 'Amount deleted successfully' });
+        res.status(200).json({ data: deleteBill, message: 'Amount deleted successfully', status: 200 });
       } catch (error) {
         next(error);
       }

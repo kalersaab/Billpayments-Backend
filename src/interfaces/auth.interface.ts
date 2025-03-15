@@ -3,6 +3,9 @@ import { User } from '@interfaces/users.interface';
 
 export interface DataStoredInToken {
   _id: string;
+  username: string;
+  email: string;
+  password: string;
 }
 
 export interface TokenData {
@@ -11,5 +14,6 @@ export interface TokenData {
 }
 
 export interface RequestWithUser extends Request {
+  req: DataStoredInToken;
   user: User;
 }

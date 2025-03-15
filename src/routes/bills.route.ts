@@ -3,6 +3,7 @@ import { Routes } from '@interfaces/routes.interface';
 import { BillController } from '@/controllers/bills.controller';
 import { ValidationMiddleware } from '@middlewares/validation.middleware';
 import { createBillDto } from '@/dtos/bills.dto';
+import { authMiddleware } from '@/middlewares/auth.middleware';
 
 export class BillRoute implements Routes {
   public path = '/bills';
@@ -14,10 +15,10 @@ export class BillRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/createpayment`, ValidationMiddleware(createBillDto), this.bill.Bills);
-    this.router.get(`${this.path}/getpayments`, this.bill.getBills);
-    this.router.get(`${this.path}/getpayments/:id`, this.bill.getBillById);
-    this.router.put(`${this.path}/updatepayments/:id`, ValidationMiddleware(createBillDto, true), this.bill.updateBill);
+    this.router.post(`${this.path}/createpayment`,authMiddleware, ValidationMiddleware(createBillDto), this.bill.Bills);
+    this.router.get(`${this.path}/getpayments`, authMiddleware, this.bill.getBills);
+    this.router.get(`${this.path}/getpayments/:id`,authMiddleware, this.bill.getBillById);
+    this.router.put(`${this.path}/updatepayments/:id`,authMiddleware, ValidationMiddleware(createBillDto, true), this.bill.updateBill);
     this.router.delete(`${this.path}/:id`, this.bill.deleteBill);
   }
 }

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
+import { HttpException } from '@/exceptions/httpException';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -29,20 +30,20 @@ export class UserController {
 
   public createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userData: User = req.body;
-      const createUserData: User = await this.user.createUser(userData);
+      const userData = req.body;
+      const createUserData = await this.user.createUser(userData);
 
       res.status(201).json({ data: createUserData, message: 'created' });
     } catch (error) {
-      next(error);
+      next(new HttpException(400, error.message));
     }
   };
 
   public updateUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId: string = req.params.id;
-      const userData: User = req.body;
-      const updateUserData: User = await this.user.updateUser(userId, userData);
+      const userData = req.body;
+      const updateUserData = await this.user.updateUser(userId, userData);
 
       res.status(200).json({ data: updateUserData, message: 'updated' });
     } catch (error) {
@@ -60,4 +61,17 @@ export class UserController {
       next(error);
     }
   };
+  public loginUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userData = req.body;
+      const loginUser = await this.user.login(userData);
+
+      res.status(200).json({ data: loginUser, message: 'login' });
+      if(!loginUser){
+        res.status(404).json({ data: [], message: 'user not found' });
+      }
+    } catch (error) {
+      next(new HttpException(500, error.message));
+    }
+  }
 }

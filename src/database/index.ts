@@ -1,8 +1,11 @@
 import { connect, set } from 'mongoose';
 import { NODE_ENV, DB_HOST, DB_PORT, DB_DATABASE } from '@config';
-
+interface dbConfig {
+  url: string;
+  options: Object;
+}
 export const dbConnection = async () => {
-  const dbConfig = {
+  const dbConfig:dbConfig = {
     url: `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`,
     options: {
       useNewUrlParser: true,
