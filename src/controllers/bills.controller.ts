@@ -1,4 +1,5 @@
 import { createBillDto } from '@/dtos/bills.dto';
+import { HttpException } from '@/exceptions/HttpException';
 import { BillService } from '@/services/bill.service';
 import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
@@ -6,12 +7,26 @@ import Container from 'typedi';
 export class BillController {
   public BillService = Container.get(BillService);
   public Bills = async (req: Request, res: Response, next: NextFunction) => {
-    const payments: createBillDto = req.body;
     try {
-      const createBill = await this.BillService.createBill(payments);
-      res.status(201).json({ data: createBill, message: 'bill created successfully' });
-    } catch (error) {
-      next(error);
+      const payments: createBillDto = req.body;
+      const { rate, quantity } = payments;
+
+      // Validate rate and quantity
+      if (typeof rate !== 'number' || typeof quantity !== 'number') {
+        return next(new HttpException(400, 'Invalid input: rate and quantity must be numbers.'));
+      }
+
+      const total:number = rate * quantity;
+      const createBill = await this.BillService.createBill({ ...payments, total });
+
+      res.status(201).json({
+        status:201,
+        data: createBill,
+        message: 'Bill created successfully',
+      });
+
+    } catch (error: any) {
+      next(new HttpException(500, error?.message || 'Something went wrong'));
     }
   };
   public getBills = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,5 +1,5 @@
 import { createBillDto } from '@/dtos/bills.dto';
-import { HttpException } from '@/exceptions/httpException';
+import { HttpException } from '@/exceptions/HttpException';
 import { PaymentModel } from '@/models/bill.model';
 import { InferSchemaType, Model } from 'mongoose';
 import { Service } from 'typedi';

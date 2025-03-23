@@ -1,13 +1,11 @@
-import { IsString } from "class-validator";
-
+import { IsNumber, IsString } from "class-validator";
 export class CashManagementDto {
-    @IsString()
-    public amount: string;
-  
+    @IsNumber()
+    public amount: number;
+
     @IsString()
     public notes: string;
-  
+
     @IsString()
     public type: string;
-
 }

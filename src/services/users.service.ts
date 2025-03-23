@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcrypt';
 import { Service } from 'typedi';
-import { HttpException } from '@exceptions/httpException';
+import { HttpException } from '@exceptions/HttpException';
 import { User } from '@interfaces/users.interface';
 import userSchema from '@/models/users.model';
 import { model, InferSchemaType, Model } from 'mongoose';

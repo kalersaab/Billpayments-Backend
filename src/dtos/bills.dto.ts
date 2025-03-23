@@ -1,18 +1,16 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsOptional, IsString } from "class-validator";
 
 export class createBillDto {
 @IsString()
+@IsOptional()
 public products: string;
 
-@IsString()
-public quantity: string;
+@IsNumber()
+public quantity: number;
 
-@IsString()
-public rate: string;
+@IsNumber()
+public rate: number;
 
-@IsString()
-public total: string;
-
-@IsString()
-public status: string;
+@IsNumber()
+public total: number;
 }

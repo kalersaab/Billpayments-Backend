@@ -3,7 +3,6 @@ import { UserController } from '@controllers/users.controller';
 import { CreateUserDto, LoginUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
 import { ValidationMiddleware } from '@middlewares/validation.middleware';
-import { log } from 'console';
 
 export class UserRoute implements Routes {
   public path = '/users';
@@ -16,7 +15,7 @@ export class UserRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, ()=>this.user.getUsers);
-    this.router.get(`${this.path}/login`, ValidationMiddleware(LoginUserDto), this.user.loginUser);
+    this.router.post(`${this.path}/login`, ValidationMiddleware(LoginUserDto), this.user.loginUser);
     this.router.get(`${this.path}/:id`, this.user.getUserById);
     this.router.post(`${this.path}`, ValidationMiddleware(CreateUserDto), this.user.createUser);
     this.router.put(`${this.path}/:id`, ValidationMiddleware(CreateUserDto, true), this.user.updateUser);

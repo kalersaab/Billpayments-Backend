@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Container } from 'typedi';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
-import { HttpException } from '@/exceptions/httpException';
+import { HttpException } from '@/exceptions/HttpException';
 
 export class UserController {
   public user = Container.get(UserService);
@@ -33,7 +33,7 @@ export class UserController {
       const userData = req.body;
       const createUserData = await this.user.createUser(userData);
 
-      res.status(201).json({ data: createUserData, message: 'created' });
+      res.status(201).json({ data: createUserData, message: `${req?.body?.username} created Successfully`, status:201 });
     } catch (error) {
       next(new HttpException(400, error.message));
     }
@@ -66,7 +66,7 @@ export class UserController {
       const userData = req.body;
       const loginUser = await this.user.login(userData);
 
-      res.status(200).json({ data: loginUser, message: 'login' });
+      res.status(200).json({ data: loginUser, message: `${req?.body?.username} login successfully` });
       if(!loginUser){
         res.status(404).json({ data: [], message: 'user not found' });
       }

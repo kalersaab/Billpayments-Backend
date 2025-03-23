@@ -4,9 +4,9 @@ export interface User {
   email: string;
   password: string;
 }
-export interface payments{
+export interface product{
   _id?: string;
-  products: string;
+  productName: string;
   quantity: string;
   rate: string;
   total: string;
@@ -14,7 +14,7 @@ export interface payments{
 }
 export interface Cash{
   _id?: string;
-  amount: string;
+  amount: number;
   notes: string;
   type: string;
 }

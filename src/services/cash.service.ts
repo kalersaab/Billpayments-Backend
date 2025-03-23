@@ -1,5 +1,5 @@
 import { CashManagementDto } from "@/dtos/cash.dto";
-import { HttpException } from "@/exceptions/httpException";
+import { HttpException } from "@/exceptions/HttpException";
 import { CashManagement } from "@/models/cash.model";
 import { InferSchemaType, Model } from "mongoose";
 import { Service } from "typedi";
@@ -20,20 +20,44 @@ export class CashService {
        if (!updatepayment) throw new HttpException(404, 'Cash not found');
        return updatepayment;
      }
-       public async findAllCash() {
+       public async findAllCash(query: { page: string; limit: string; keyword?: string,type:string }) {
+        const pageIndex = parseInt(query.page) || 0;
+        const pageSize = parseInt(query.limit) || 10;
+        const searchCriteria: {} = {};
+    
+        if (query.keyword) {
+          searchCriteria['$or'] = [
+            {
+              notes: { $regex: `${query.keyword?.trim()}`, $options: 'i' },
+         
+            },
+          ];
+        }
+        if (query.type) {
+          const types = query.type.split(',').map(t => t.trim()); 
+          searchCriteria['$or'] = [
+              ...searchCriteria['$or'] || [],
+              {
+                  type: { $in: types },
+              }
+          ];
+      }
          const payment = await this._cash.aggregate([
+          { $match: searchCriteria },
            {
-             $sort: { lastActiveDate: -1 },
+             $sort: { createdAt: -1 },
            },
            {
              $facet: {
-               data: [{ $skip: 0 }, { $limit: 10 }],
+               data: [
+                { $skip: pageIndex }, 
+                { $limit: pageSize}
+              ],
                count: [{ $count: 'total' }],
              },
            }
          ])
-         if(!payment) throw new HttpException(404, 'Cash not found');
-         return payment[0];
+         return { cash: payment[0]?.data ?? '', count: payment[0]?.count[0]?.total };
        }
      public async deleteCash(id: string) {
        if (!id) throw new HttpException(409, 'Cash Id be empty');

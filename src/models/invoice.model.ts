@@ -9,7 +9,7 @@ const invoiceSchema = new mongoose.Schema({
     },
     products: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Payment",
+        ref: "product",
         required: true
     }],
     InvoiceDate: {
@@ -42,7 +42,7 @@ const invoiceSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
-    }
+    },
 }, { timestamps: true });
 
 invoiceSchema.pre("save", async function (next) {

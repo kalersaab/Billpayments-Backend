@@ -1,4 +1,5 @@
 import { CashManagementDto } from "@/dtos/cash.dto";
+import { HttpException } from "@/exceptions/HttpException";
 import { CashService } from "@/services/cash.service";
 import { NextFunction, Request, Response } from "express";
 import Container from "typedi";
@@ -9,9 +10,9 @@ export class CashManagementController {
       const amount: CashManagementDto = req.body;
       try {
         const createBill = await this.CashService.createCash(amount);
-        res.status(201).json({ data: createBill, message: 'Amount created successfully' });
+        res.status(201).json({ data: createBill, message: 'Amount created successfully', status: 201 });
       } catch (error) {
-        next(error);
+        next(new HttpException(500, error || 'Something went Wrong'));
       }
     };
     public updateCash = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,15 +20,20 @@ export class CashManagementController {
       const { id } = req.params;
       try {
         const updateBill = await this.CashService.updateCash(id,body);
-        res.status(200).json({ data: updateBill, message: 'Amount updated successfully' });
+        res.status(200).json({ data: updateBill, message: 'Amount updated successfully', status:201 });
       } catch (error) {
-        next(error);
+        next(new HttpException (500, error ?? 'Something went wrong'));
       }
     }
     public getCash = async (req: Request, res: Response, next: NextFunction) => {
+      const {query}:any = req
       try 
       {
-        const findAllAmount = await this.CashService.findAllCash();
+        const findAllAmount = await this.CashService.findAllCash(query);
+      if(!findAllAmount.count){
+        res.status(404).json({data:[], message:'Amount not found', status:404})
+        return;
+      }
         res.status(200).json({ data: findAllAmount, message: 'Amount successfully fetched' });
       }
       catch (error) {
@@ -38,9 +44,12 @@ export class CashManagementController {
       const { id } = req.params;
       try {
         const deleteBill = await this.CashService.deleteCash(id);
-        res.status(200).json({ data: deleteBill, message: 'Amount deleted successfully', status: 200 });
+        if(!deleteBill){
+          res.status(404).json({message:'Amount not found', status:404})
+        }
+        res.status(200).json({ message: 'Amount deleted successfully', status: 200 });
       } catch (error) {
-        next(error);
+        next(new HttpException(500, error.message ?? 'something went wrong'));
       }
     }
 } 

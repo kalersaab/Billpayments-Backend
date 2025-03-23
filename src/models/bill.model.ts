@@ -1,32 +1,28 @@
-import { payments } from '@/interfaces/users.interface';
+import { product } from '@/interfaces/users.interface';
 import { model, Schema, Document } from 'mongoose';
-const paymentSchema: Schema = new Schema(
+const productSchema: Schema = new Schema(
   {
-    products: {
+    productName: {
       type: String,
-      require: true,
+      required: true,
       trim: true,
     },
     quantity: {
-      type: String,
-      require: true,
+      type: Number,
+      required: true,
       trim: true,
     },
     rate: {
-      type: String,
-      require: true,
-      trim: true,
-    },
-    status: {
-      type: String,
+      type: Number,
+      required: true,
       trim: true,
     },
     total: {
-      type: String,
-      require: true,
+      type: Number,
+      required: true,
       trim: true,
     },
   },
   { timestamps: true },
 );
-export const PaymentModel = model<payments & Document>('Payment', paymentSchema);
+export const PaymentModel = model<product & Document>('Product', productSchema);

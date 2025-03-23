@@ -288,23 +288,19 @@ definitions:
       - quantity
       - rate
       - total
-      - status
     properties:
       products:
         type: string
         description: Products
       quantity:
-        type: string
+        type: number
         description: Quantity
       rate:
-        type: string
+        type: number
         description: Rate
       total:
-        type: string
+        type: number
         description: Total
-      status:
-        type: string
-        description: Status
 
   cashManagement:
     type: object

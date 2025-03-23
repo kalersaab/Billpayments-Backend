@@ -1,5 +1,5 @@
 import { InvoiceDto } from "@/dtos/invoice.dto";
-import { HttpException } from "@/exceptions/httpException";
+import { HttpException } from "@/exceptions/HttpException";
 import { InvoiceService } from "@/services/invoice.service";
 import { NextFunction, Request, Response } from "express";
 

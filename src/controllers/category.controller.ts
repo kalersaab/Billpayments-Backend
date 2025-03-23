@@ -1,4 +1,4 @@
-import { HttpException } from '@/exceptions/httpException';
+import { HttpException } from '@/exceptions/HttpException';
 import { CategoryService } from '@/services/category.service';
 import { NextFunction, Request, Response } from 'express';
 
