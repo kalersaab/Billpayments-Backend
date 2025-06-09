@@ -22,6 +22,11 @@ const productSchema: Schema = new Schema(
       required: true,
       trim: true,
     },
+    invoiceId:{
+      type: Schema.Types.ObjectId,
+      ref: 'invoice',
+      required: true,
+    }
   },
   { timestamps: true },
 );

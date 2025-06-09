@@ -6,7 +6,7 @@ import { Service } from 'typedi';
 @Service()
 export class BillService {
   private _payments: Model<InferSchemaType<typeof PaymentModel>> = PaymentModel;
-  public async createBill(payment: createBillDto) {
+  public async createBill(payment):Promise<any> {
     try {
       const payments = await this._payments.create(payment);
       return payments;

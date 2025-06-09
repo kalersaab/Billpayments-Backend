@@ -13,9 +13,9 @@ export class CashRoute implements Routes {
     this.initializeRoutes();
   }
     private initializeRoutes() {
-        this.router.get(`${this.path}/getcash`, authMiddleware, this.cash.getCash);
-        this.router.post(`${this.path}/createcash`, authMiddleware,ValidationMiddleware(CashManagementDto),this.cash.Cash);
-        this.router.put(`${this.path}/updatecash/:id`,authMiddleware, ValidationMiddleware(CashManagementDto),this.cash.updateCash);
-        this.router.delete(`${this.path}/deletecash/:id`,authMiddleware, this.cash.deleteCash);
+        this.router.get(`${this.path}/getcash`,this.cash.getCash);
+        this.router.post(`${this.path}/createcash`,ValidationMiddleware(CashManagementDto),this.cash.Cash);
+        this.router.put(`${this.path}/updatecash/:id`, ValidationMiddleware(CashManagementDto),this.cash.updateCash);
+        this.router.delete(`${this.path}/deletecash/:id`, this.cash.deleteCash);
     }
 }

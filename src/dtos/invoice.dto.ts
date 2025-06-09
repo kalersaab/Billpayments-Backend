@@ -6,10 +6,8 @@ export class InvoiceDto {
     @IsString()
     CustomerName: string;
     @IsNumber()
-    Quantity: number;
-    @IsNumber()
-    total: number;
-    @IsNumber()
     @IsOptional()
     discount: number;
+    @IsString({each:true})
+    products: string[];
 } 

@@ -5,7 +5,10 @@ import { NextFunction, Request, Response } from 'express';
 import Container from 'typedi';
 
 export class BillController {
-  public BillService = Container.get(BillService);
+    private billService: BillService;
+    constructor() {
+      this.billService = new BillService();
+    }
   public Bills = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const payments: createBillDto = req.body;
@@ -17,7 +20,7 @@ export class BillController {
       }
 
       const total:number = rate * quantity;
-      const createBill = await this.BillService.createBill({ ...payments, total });
+      const createBill = await this.billService.createBill({ ...payments, total });
 
       res.status(201).json({
         status:201,
@@ -32,7 +35,7 @@ export class BillController {
   public getBills = async (req: Request, res: Response, next: NextFunction) => {
     const { query }: any = req;
     try {
-      const getBills = await this.BillService.findAllBills(query);
+      const getBills = await this.billService.findAllBills(query);
       res.status(200).json({ data: getBills, message: 'bills fetched successfully' });
     } catch (error) {
       next(error);
@@ -41,7 +44,7 @@ export class BillController {
   public getBillById = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const getBill = await this.BillService.findBillById(id);
+      const getBill = await this.billService.findBillById(id);
       res.status(200).json({ data: getBill, message: 'bill fetched successfully' });
     } catch (error) {
       next(error);
@@ -51,7 +54,7 @@ export class BillController {
     const { id } = req.params;
     const { body } = req;
     try {
-      const updateBill = await this.BillService.updateBill(id, body);
+      const updateBill = await this.billService.updateBill(id, body);
       res.status(200).json({ data: updateBill, message: 'bill updated successfully' });
     } catch (error) {
       next(error);
@@ -60,7 +63,7 @@ export class BillController {
     public deleteBill = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
-        const deleteBill = await this.BillService.deleteBill(id);
+        const deleteBill = await this.billService.deleteBill(id);
         res.status(200).json({ data: deleteBill, message: 'bill deleted successfully' });
         } catch (error) {
         next(error);

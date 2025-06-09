@@ -15,10 +15,10 @@ export class BillRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/createpayment`,authMiddleware, ValidationMiddleware(createBillDto), this.bill.Bills);
-    this.router.get(`${this.path}/getpayments`, authMiddleware, this.bill.getBills);
-    this.router.get(`${this.path}/getpayments/:id`,authMiddleware, this.bill.getBillById);
-    this.router.put(`${this.path}/updatepayments/:id`,authMiddleware, ValidationMiddleware(createBillDto, true), this.bill.updateBill);
+    this.router.post(`${this.path}`, this.bill.Bills);
+    this.router.get(`${this.path}`, this.bill.getBills);
+    this.router.get(`${this.path}/:id`, this.bill.getBillById);
+    this.router.put(`${this.path}/:id`, ValidationMiddleware(createBillDto, true), this.bill.updateBill);
     this.router.delete(`${this.path}/:id`, this.bill.deleteBill);
   }
 }

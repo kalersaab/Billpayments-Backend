@@ -57,11 +57,11 @@ export class CashService {
              },
            }
          ])
-         return { cash: payment[0]?.data ?? '', count: payment[0]?.count[0]?.total };
+         return { cash: payment[0]?.data, count: payment[0]?.count[0]?.total };
        }
      public async deleteCash(id: string) {
        if (!id) throw new HttpException(409, 'Cash Id be empty');
-       const deletepayment = await this._cash.findByIdAndDelete(id);
+       const deletepayment = await this._cash.findByIdAndDelete(id, { new: true });
        if (!deletepayment) throw new HttpException(404, 'Cash not found');
        return deletepayment;
      }

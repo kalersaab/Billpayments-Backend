@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class createBillDto {
 @IsString()
@@ -13,4 +13,6 @@ public rate: number;
 
 @IsNumber()
 public total: number;
+@IsMongoId()
+public invoiceId?: string;
 }

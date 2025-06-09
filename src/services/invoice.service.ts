@@ -1,8 +1,24 @@
 import { InvoiceDto } from '@/dtos/invoice.dto';
 import invoiceSchema from '@/models/invoice.model';
-import { InferSchemaType, model, Model } from 'mongoose';
+import Counter from '@/models/invoiceCounter.model';
+import counterSchema from '@/models/invoiceCounter.model';
+import { InferSchemaType, model, Model, Types } from 'mongoose';
 import { Service } from 'typedi';
-
+interface InvoiceWithBills {
+  _id: Types.ObjectId;
+  InvoiceNo: string;
+  InvoiceDate: Date;
+  paymentMode: string;
+  CustomerName: string;
+  discount: number;
+  createdBy: string;
+  bills: {
+    productName: string;
+    rate: number;
+    quantity: number;
+    total: number;
+  }[];
+}
 @Service()
 export class InvoiceService {
   private _invoice: Model<InferSchemaType<typeof invoiceSchema>>;
@@ -11,7 +27,12 @@ export class InvoiceService {
   }
   public async createInvoice(invoice: InvoiceDto) {
     try {
-      const createInvoice = new this._invoice({ ...invoice });
+       const counter = await Counter.findByIdAndUpdate(
+            { _id: "invoice" }, 
+            { $inc: { seq: 1 } }, 
+            { new: true, upsert: true }
+        );
+      const createInvoice = new this._invoice({ ...invoice, InvoiceNo: `INV-${counter.seq}` });
       await createInvoice.save();
       return createInvoice;
     } catch (error) {
@@ -46,9 +67,72 @@ export class InvoiceService {
       throw error;
     }
   }
-  public findInvoiceById(id: string) {
-    return this._invoice.findById(id);
-  }
+ public async findInvoiceById(id: string): Promise<InvoiceWithBills[]> {
+  return this._invoice.aggregate([
+    { 
+      $match: { 
+        _id: new Types.ObjectId(id) 
+      } 
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'invoiceId',
+        as: 'bills'
+      }
+    },
+    {
+      $unwind: {
+        path: '$bills',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $group: {
+        _id: '$_id',
+        InvoiceNo: { $first: '$InvoiceNo' },
+        InvoiceDate: { $first: '$InvoiceDate' },
+        paymentMode: { $first: '$paymentMode' },
+        CustomerName: { $first: '$CustomerName' },
+        discount: { $first: '$discount' },
+        createdBy: { $first: '$createdBy' },
+        bills: {
+          $push: {
+            productName: '$bills.productName',
+            rate: '$bills.rate',
+            quantity: '$bills.quantity',
+            total: '$bills.total'
+          }
+        }
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        InvoiceNo: 1,
+        InvoiceDate: 1,
+        paymentMode: 1,
+        CustomerName: 1,
+        discount: 1,
+        createdBy: 1,
+        bills: {
+          $cond: {
+            if: { $eq: [{ $size: '$bills' }, 1] },
+            then: '$bills',
+            else: {
+              $filter: {
+                input: '$bills',
+                as: 'bill',
+                cond: { $ne: ['$$bill.productName', null] }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]);
+}
   public updateInvoice(id: string, invoice: InvoiceDto) {
     return this._invoice.updateOne({ _id: id }, { $set: invoice });
   }

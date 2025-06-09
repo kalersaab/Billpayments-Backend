@@ -64,6 +64,9 @@ export class UserController {
   public loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData = req.body;
+      if (!userData.username ||!userData.password) {
+        throw new HttpException(400, 'Missing username or password');
+      }
       const loginUser = await this.user.login(userData);
 
       res.status(200).json({ data: loginUser, message: `${req?.body?.username} login successfully` });

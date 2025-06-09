@@ -4,14 +4,8 @@ import Counter from "./invoiceCounter.model";
 const invoiceSchema = new mongoose.Schema({
     InvoiceNo: {
         type: String,
-        required: true,
         unique: true
     },
-    products: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-        required: true
-    }],
     InvoiceDate: {
         type: Date,
         required: true,
@@ -26,14 +20,6 @@ const invoiceSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Quantity: {
-        type: Number,
-        required: true
-    },
-    total: {
-        type: Number,
-        required: true
-    },
     discount: {
         type: Number,
         default: 0  
@@ -41,11 +27,11 @@ const invoiceSchema = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        // required: true
     },
 }, { timestamps: true });
 
-invoiceSchema.pre("save", async function (next) {
+invoiceSchema.pre("validate", async function (next) {
     if (!this.InvoiceNo) { 
         const counter = await Counter.findByIdAndUpdate(
             { _id: "invoice" }, 
