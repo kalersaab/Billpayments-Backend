@@ -33,7 +33,7 @@ export class UserController {
       const userData = req.body;
       const createUserData = await this.user.createUser(userData);
 
-      res.status(201).json({ data: createUserData, message: `${req?.body?.username} created Successfully`, status:201 });
+      res.status(201).json({ data: createUserData, message: `${req?.body?.email} created Successfully`, status:201 });
     } catch (error) {
       next(new HttpException(400, error.message));
     }
@@ -64,12 +64,12 @@ export class UserController {
   public loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData = req.body;
-      if (!userData.username ||!userData.password) {
+      if (!userData.email ||!userData.password) {
         throw new HttpException(400, 'Missing username or password');
       }
       const loginUser = await this.user.login(userData);
 
-      res.status(200).json({ data: loginUser, message: `${req?.body?.username} login successfully` });
+      res.status(200).json({ data: loginUser, message: `${userData.email} login successfully` });
       if(!loginUser){
         res.status(404).json({ data: [], message: 'user not found' });
       }

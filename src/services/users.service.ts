@@ -63,13 +63,13 @@ export class UserService {
     return deleteUserById;
   }
   public async login (userData: LoginUserDto) {
-    const { username, password } = userData
-    if(!username || !password) throw new HttpException(400, 'username and password are required')
-    const findUser: User = await this._user.findOne({ username: username });
+    const { email, password } = userData
+    if(!email || !password) throw new HttpException(400, 'email and password are required')
+    const findUser: User = await this._user.findOne({ email: email });
     if (!findUser) throw new HttpException(409, `User doesn't exist`);
    const isPasswordMatching: boolean = await compare(password, findUser.password);
    if (!isPasswordMatching) throw new HttpException(409, 'Password is incorrect');
-   const token = sign({ username: findUser.username, id: findUser._id }, SECRET_KEY, { expiresIn: EXPIRES_IN });
+   const token = sign({id: findUser._id }, SECRET_KEY, { expiresIn: EXPIRES_IN });
    return { token }
   }
 }

@@ -1,13 +1,15 @@
 import { model, Schema } from 'mongoose';
-import { User } from '@interfaces/users.interface';
 
 const userSchema : Schema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
+firstName:{
+  type:String,
+  required:true,
+  trim:true
+},
+lastName:{
+  type:String,
+  trim:true
+},
   email: {
     type: String,
     required: true,
