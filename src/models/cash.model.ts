@@ -16,4 +16,4 @@ const cashSchema: Schema = new Schema({
         enum: ['credit', 'debit'],
     },
 },{ timestamps: { createdAt: true, updatedAt: true } });  
-export const CashManagement = model<Cash & Document>('cashManagement', cashSchema);
+export default  cashSchema

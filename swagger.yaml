@@ -120,6 +120,88 @@ paths:
         500:
           description: 'Server Error'
 
+  /api/categories:
+    post:
+      tags:
+      - Category
+      summary: Create Category
+      parameters:
+      - name: body
+        in: body
+        description: Category Data
+        required: true
+        schema:
+          $ref: '#/definitions/category'
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+    get:
+      tags:
+      - Category
+      summary: Find All Categories
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
+  /api/categories/{id}:
+    put:
+      tags:
+      - Category
+      summary: Update Category By Id
+      parameters:
+      - name: id
+        in: path
+        description: Category Id
+        required: true
+      - name: body
+        in: body
+        description: Category Data
+        required: true
+        schema:
+          $ref: '#/definitions/category'
+      responses:
+        200:
+          description: 'OK'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+
+  /api/customers:
+    post:
+      tags:
+      - customers
+      summary: Add Customer
+      parameters:
+      - name: body
+        in: body
+        description: customer Data
+        required: true
+        schema:
+          $ref: '#/definitions/customer'
+      responses:
+        201:
+          description: 'Created'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'
+    get:
+      tags:
+      - customers
+      summary: Find All Customers
+      responses:
+        200:
+          description: 'OK'
+        500:
+          description: 'Server Error'
   # [POST] payments
   /api/bills/createpayment:
     post:
@@ -331,6 +413,27 @@ definitions:
         type: number
         description: Total
 
+  category:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        description: Category Name
+  
+  customer:
+    type: object
+    required:
+      - name
+      - mobile
+    properties:
+      name:
+        type: string
+        description: Customer Name
+      mobile:
+        type: string
+        description: Customer mobile number
   cashManagement:
     type: object
     required:

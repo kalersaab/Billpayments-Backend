@@ -8,7 +8,7 @@ name:{
 },
 categoryId:{
     type: Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: 'category',
     required: true,
 },
   price: {

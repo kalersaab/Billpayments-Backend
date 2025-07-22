@@ -5,7 +5,10 @@ import { NextFunction, Request, Response } from "express";
 import Container from "typedi";
 
 export class CashManagementController {
-    public CashService = Container.get(CashService);
+    private CashService: CashService;
+      constructor() {
+        this.CashService = new CashService();
+      }
     public Cash = async (req: Request, res: Response, next: NextFunction) => {
       const amount: CashManagementDto = req.body;
       try {
