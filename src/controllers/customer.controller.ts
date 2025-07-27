@@ -12,7 +12,7 @@ export class CustomerController {
     try {
       const createCustomer = await this.customerService.createCustomers(customerData);
 
-      res.status(201).json({ data: createCustomer, message: 'Customer created successfully' });
+      res.status(201).json({ data: createCustomer, message: 'Customer created successfully', status:201 });
     } catch (error) {
       next(new HttpException(500, error.message || 'Something went wrong'));
     }
@@ -62,7 +62,7 @@ export class CustomerController {
     try {
       const deletedCustomer = await this.customerService.deleteCustomer(id);
       if (deletedCustomer) {
-        res.status(200).json({ data: deletedCustomer, message: 'Customer deleted successfully' });
+        res.status(200).json({ status:200,message: 'Customer deleted successfully' });
       } else {
         res.status(404).json({ data: [], message: 'Customer not found' });
       }

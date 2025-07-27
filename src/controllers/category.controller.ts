@@ -60,8 +60,8 @@ export class CategoryController {
   public async deleteCategory(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     try {
-      const category = await this.CategoryService.deleteCategory(id);
-      res.status(200).json({ data: category, message: 'category deleted successfully', status: 200 });
+     await this.CategoryService.deleteCategory(id);
+      res.status(200).json({ message: 'category deleted successfully', status: 200 });
     } catch (error) {
       next(new HttpException(500, error.message || 'Something went wrong'));
     }

@@ -18,5 +18,7 @@ export class CustomerRoute implements Routes {
   private initializeRoutes() {
     this.router.post(`${this.path}`, ValidationMiddleware(CustomerDto, true),this.customer.createCustomerData);
     this.router.get(`${this.path}`, this.customer.getCustomers);
+    this.router.put(`${this.path}/:id`, this.customer.updateCustomerById);
+    this.router.delete(`${this.path}/:id`, this.customer.deleteCustomer);
   }
 }

@@ -1,13 +1,16 @@
 import { CategoryDto } from '@/dtos/category.dto';
 import categorySchema from '@/models/category.model';
+import productSchema from '@/models/product.model';
 import { InferSchemaType, model, Model } from 'mongoose';
 import { Service } from 'typedi';
 
 @Service()
 export class CategoryService {
   private _category: Model<InferSchemaType<typeof categorySchema>>;
+  private _Product: Model<InferSchemaType<typeof productSchema>>;
   constructor() {
     this._category = model('category', categorySchema);
+    this._Product = model('product', productSchema);
   }
   public async createCategory(name: CategoryDto) {
     try {
@@ -65,8 +68,10 @@ export class CategoryService {
   }
   public async deleteCategory(id: string) {
     try {
-      const deleteCategory = await this._category.findByIdAndDelete(id);
-      return deleteCategory;
+      await this._category.findByIdAndDelete(id);
+      await this._Product.deleteMany({ categoryId: id });
+      return true;
+
     } catch (error) {
       throw error;
     }
