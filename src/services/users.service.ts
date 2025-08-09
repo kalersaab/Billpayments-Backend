@@ -10,13 +10,13 @@ import { EXPIRES_IN, SECRET_KEY } from '@/config';
 
 @Service()
 export class UserService {
-  private _user: Model<InferSchemaType<typeof userSchema>>
+  private _user: Model<InferSchemaType<typeof userSchema>>;
   constructor() {
     this._user = model('user', userSchema);
   }
   public async findAllUser(): Promise<User[]> {
     const users: User[] = await this._user.find();
-    return users; 
+    return users;
   }
 
   public async findUserById(userId: string): Promise<User> {
@@ -39,7 +39,7 @@ export class UserService {
     return createUserData;
   }
 
-  public async updateUser(userId: string, userData: CreateUserDto){
+  public async updateUser(userId: string, userData: CreateUserDto) {
     if (userData.email) {
       const findUser: User = await this._user.findOne({ email: userData.email });
       if (findUser && findUser._id != userId) throw new HttpException(409, `This email ${userData.email} already exists`);
@@ -62,14 +62,30 @@ export class UserService {
 
     return deleteUserById;
   }
-  public async login (userData: LoginUserDto) {
-    const { email, password } = userData
-    if(!email || !password) throw new HttpException(400, 'email and password are required')
+  public async login(userData: LoginUserDto) {
+    const { email, password } = userData;
+    if (!email || !password) throw new HttpException(400, 'email and password are required');
     const findUser: User = await this._user.findOne({ email: email });
     if (!findUser) throw new HttpException(409, `User doesn't exist`);
-   const isPasswordMatching: boolean = await compare(password, findUser.password);
-   if (!isPasswordMatching) throw new HttpException(409, 'Password is incorrect');
-   const token = sign({id: findUser._id }, SECRET_KEY, { expiresIn: EXPIRES_IN });
-   return { token }
+    const isPasswordMatching: boolean = await compare(password, findUser.password);
+    if (!isPasswordMatching) throw new HttpException(409, 'Password is incorrect');
+    const token = sign({ id: findUser._id }, SECRET_KEY, { expiresIn: EXPIRES_IN });
+    return { token };
+  }
+  public async meApi(loginUserId) {
+    if (!loginUserId) throw new HttpException(400, 'UserId is empty ');
+    const findMeData = await this._user.aggregate([
+      {
+        $match: {
+          _id: loginUserId,
+        },
+      },
+      {
+        $project: {
+          password: 0,
+        },
+      },
+    ]);
+    return findMeData;
   }
 }

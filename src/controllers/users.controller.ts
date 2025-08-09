@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { Container } from 'typedi';
 import { User } from '@interfaces/users.interface';
 import { UserService } from '@services/users.service';
 import { HttpException } from '@/exceptions/HttpException';
 
 export class UserController {
-  public user = Container.get(UserService);
+   private user: UserService;
+      constructor() {
+        this.user = new UserService();
+      }
 
   public getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -77,4 +79,16 @@ export class UserController {
       next(new HttpException(500, error.message));
     }
   }
+   public getLoginUserData = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const loginUserId = req.user.id;
+      const findLoginUserData = await this.user.meApi(loginUserId);
+      if(!findLoginUserData){
+        res.status(404).json({ message: "Not found",status:404});
+      }
+      res.status(200).json({ message: "profile get successfully",status:200, data: findLoginUserData});
+    } catch (error) {
+      next(new HttpException(500, error.message ||'Something went wrong'));
+    }
+  };
 }
